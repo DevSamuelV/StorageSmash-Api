@@ -1,4 +1,5 @@
 import { Request, Response } from "../types/Request";
+import { Token } from "../security/token";
 
 export async function TokenMiddleWare(
   req: Request,
@@ -23,14 +24,13 @@ export async function TokenMiddleWare(
 
   const token = req.body.token;
 
-  const tokenInfo = await db_Token.CheckToken(token);
+  const tokenInfo = await Token.Check(token);
 
   if (tokenInfo.allow) return next();
 
-  console.log(tokenInfo.allow);
-
   return res.send({
     error: true,
+    code: 200,
     message: tokenInfo.message,
   });
 }

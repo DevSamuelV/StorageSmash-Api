@@ -1,13 +1,17 @@
 import { Express } from "express";
-import { cmd_user_create } from "./User/Create";
-import { cmd_user_get } from "./User/Get";
+import { Create } from "./McServer/Create";
+import { Get } from "./McServer/Get";
+import { Usr_Create } from "./User/Create";
+import { Usr_Get } from "./User/Get";
 
 export class Command {
   constructor(express: Express) {
     // User
-    new cmd_user_create(express);
-    new cmd_user_get(express);
+    new Usr_Create(express);
+    new Usr_Get(express);
 
     // Minecraft Server
+    new Get(express);
+    new Create(express);
   }
 }
