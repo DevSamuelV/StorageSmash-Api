@@ -1,5 +1,5 @@
 {
-  "name": "StorageSmash-Api",
+  "name": "ss-api",
   "version": "1.0.0",
   "main": "build/index.js",
   "author": "DevSamuelV",
@@ -18,20 +18,23 @@
   "devDependencies": {
     "@prisma/cli": "^2.15.0",
     "nodemon": "^2.0.7",
+    "prisma": "^2.17.0",
     "typescript": "^4.1.3"
   },
   "dependencies": {
     "@prisma/client": "^2.15.0",
     "@types/express": "^4.17.11",
+    "@types/express-rate-limit": "^5.1.1",
     "@types/uuid": "^8.3.0",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
-    "date-fns": "^2.16.1",
+    "date-fns": "^2.17.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.6",
     "firebase-admin": "^9.4.2",
     "helmet": "^4.4.1",
-    "mongoose": "^5.11.13",
+    "socket.io": "^3.1.2",
     "uuid": "^8.3.2"
   }
 }

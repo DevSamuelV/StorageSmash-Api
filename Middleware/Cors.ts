@@ -1,13 +1,10 @@
 import { Request, Response } from "../types/Request";
 
 export async function Cors(req: Request, res: Response, next: () => void) {
-  res.set("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST");
-
-  res.set(
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header(
     "Access-Control-Allow-Headers",
-    "Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Authorization"
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
 
   next();

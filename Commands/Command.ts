@@ -1,17 +1,17 @@
 import { Express } from "express";
-import { Create } from "./McServer/Create";
-import { Get } from "./McServer/Get";
-import { Usr_Create } from "./User/Create";
-import { Usr_Get } from "./User/Get";
+import { McServer } from "../db/Commands/McServer";
+import { Referal } from "./Referal/Referal";
+import { User } from "./User/User";
 
 export class Command {
   constructor(express: Express) {
     // User
-    new Usr_Create(express);
-    new Usr_Get(express);
+    new User(express);
 
     // Minecraft Server
-    new Get(express);
-    new Create(express);
+    new McServer();
+
+    // Referal
+    new Referal(express);
   }
 }
