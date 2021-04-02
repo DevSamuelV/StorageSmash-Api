@@ -1,8 +1,13 @@
-import { Server } from "socket.io";
-import { RealtimeLib } from "./Lib";
+import { RealtimeServer } from "./Server";
 
 export class McServerLib {
-  public EmitPendingChange = (pending: boolean) => {
-    RealtimeLib.serve.emit("pendingChange", { isPending: pending });
-  };
+	private serve: RealtimeServer = new RealtimeServer();
+
+	public EmitPendingChange = (pending: boolean) => {
+		this.serve.Emit("pendingChange", { isPending: pending });
+	};
+
+	public ListenPendingChange = (func: () => void) => {
+		this.serve.Listen("pendingChange", func);
+	};
 }
