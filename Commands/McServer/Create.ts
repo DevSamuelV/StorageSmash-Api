@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { db } from "../../db/db";
 import { Services } from "../../Services/Services";
-import { IMcServerReq } from "../../types/MinecraftServer";
+import { IMcServerReq, ServerProperties } from "../../types/MinecraftServer";
 
 export class Create {
 	constructor(express: Express) {
@@ -15,21 +15,35 @@ export class Create {
 
 			const server: IMcServerReq = req.body.server;
 
-			const doc = await db.mc.Create(server);
-			const serverCreated = await Services.minecraft.Create(server);
+			const payload: IMcServerReq = {
+				gamemode: server.gamemode,
+				ip: "play.storagesmash.com",
+				maxPlayers: server.maxPlayers,
+				memory: server.memory,
+				name: server.name,
+				online: false,
+				serverImage: "java",
+				uid: server.uid,
+				world: server.world || ServerProperties.NO_WORLD,
+				seed: server.seed || ServerProperties.NO_SEED,
+			};
 
-			if (serverCreated == false) {
-				const queue = await db.mc.AddToQueue(server);
+			const doc = await db.mc.Create(payload);
 
-				return res.send({
-					error: false,
-					code: 303,
-					message: "Added Your Server To The Queue",
-					payload: {
-						server: queue,
-					},
-				});
-			}
+			// const serverCreated = await Services.minecraft.Create(server);
+
+			// if (serverCreated == false) {
+			// 	const queue = await db.mc.AddToQueue(server);
+
+			// 	return res.send({
+			// 		error: false,
+			// 		code: 303,
+			// 		message: "Added Your Server To The Queue",
+			// 		payload: {
+			// 			server: queue,
+			// 		},
+			// 	});
+			// }
 
 			if (doc.serverId != null) {
 				return res.send({

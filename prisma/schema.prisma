@@ -7,48 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model referal {
-  code    String @unique
-  expires String
+model Referal {
+  code      String   @unique
+  percent   Int
+  expires   String
+  createdAt DateTime @default(now())
 }
 
 model ServerQueue {
-  waiting String
-
-  serverId    String  @unique
+  waiting     String
+  id          String   @unique @default(uuid())
+  serverId    String   @unique
   serverImage String
   name        String
-  port        Int
+  port        Int?
+  rconPort    Int?
   ip          String
   memory      Int
   uid         String
   gamemode    String
   maxPlayers  Int
-  world       String
-  seed        String
+  world       String?
+  seed        String?
   online      Boolean
-  pending     Boolean @default(true)
+  pending     Boolean  @default(true)
+  createdAt   DateTime @default(now())
 }
 
 model MinecraftServer {
-  serverId    String  @unique
+  serverId    String   @unique
   serverImage String
   name        String
-  port        Int
+  port        Int?
+  rconPort    Int?
   ip          String
   memory      Int
   uid         String
   gamemode    String
   maxPlayers  Int
-  world       String
-  seed        String
+  world       String?
+  seed        String?
   online      Boolean
-  pending     Boolean @default(true)
+  pending     Boolean  @default(true)
+  createdAt   DateTime @default(now())
 }
 
 model User {
-  uid      String @unique
-  username String
-  email    String
-  photoURL String
+  uid       String   @unique
+  username  String
+  email     String
+  photoURL  String
+  createdAt DateTime @default(now())
 }

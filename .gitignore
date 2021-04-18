@@ -4,5 +4,5 @@ prisma/migrations
 
 tags
 
-.env
 officialstoragesmashFirebaseAdminsdk.json
+*.env

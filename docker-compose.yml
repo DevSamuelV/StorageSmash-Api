@@ -6,33 +6,19 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: "12.3.0.0/24"
-          gateway: "12.3.0.1/16"
+        - subnet: "21.3.0.0/24"
+          gateway: "21.3.0.1"
   default:
     driver: bridge
 
 services:
-  db:
-    image: postgres
-    restart: always
-    networks:
-      workernet:
-        ipv4_address: 12.3.0.5
-    ports:
-      - "5432:5432"
-    env_file: .env
-    volumes:
-      - .:/usr/storagesmash-api/
-
   api:
     image: node
     restart: always
     env_file: .env
     networks:
       workernet:
-        ipv4_address: 12.3.0.7
-    depends_on:
-      - db
+        ipv4_address: 21.3.0.7
     ports:
       - 6757:6757
       - 6959:6959

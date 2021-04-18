@@ -2,30 +2,33 @@ import {} from "date-fns";
 import { Controller } from "../Controller";
 
 export class Referal {
-  public Create = (code: string, expires: string) =>
-    new Promise(async (resolve) => {
-      const result = await Controller.prisma.referal.create({
-        data: {
-          expires: expires,
-          code: code,
-        },
-      });
+	public Create = (code: string, exp: string, perc: number) =>
+		new Promise(async (resolve) => {
+			console.log(exp, code, perc);
 
-      resolve(result);
-    });
+			const result = await Controller.prisma.referal.create({
+				data: {
+					expires: exp,
+					code: code,
+					percent: perc,
+				},
+			});
 
-  public Get = (code: string) =>
-    new Promise(async (resolve) => {
-      const count = await Controller.prisma.referal.count();
+			resolve(result);
+		});
 
-      if (count == null || count == 0) return;
+	public Get = (code: string) =>
+		new Promise(async (resolve) => {
+			const count = await Controller.prisma.referal.count();
 
-      const result = await Controller.prisma.referal.findUnique({
-        where: {
-          code: code,
-        },
-      });
+			if (count == null || count == 0) return null;
 
-      resolve(result);
-    });
+			const result = await Controller.prisma.referal.findUnique({
+				where: {
+					code: code,
+				},
+			});
+
+			resolve(result);
+		});
 }

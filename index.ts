@@ -1,13 +1,14 @@
 import Express from "express";
 import helmet from "helmet";
+import Cors from "cors";
 
-import { json } from "body-parser";
-import { Server } from "socket.io";
-import { Command } from "./Commands/Command";
-import { Controller } from "./db/Controller";
 import { Cdn } from "./cdn/cdn";
-import { Cors } from "./Middleware/Cors";
-import { RealtimeLib } from "./realtime/Lib";
+import { json } from "body-parser";
+import { Command } from "./Commands/Command";
+import { Realtime } from "./Realtime/Realtime";
+import { Controller } from "./db/Controller";
+import { WebSockets } from "./websockets/WebSockets";
+import { Security } from "./security/Security";
 
 require("dotenv").config();
 
@@ -16,19 +17,19 @@ require("dotenv").config();
 /* -------------------------------------------------------------------------- */
 
 const PORT = process.env.SS_PORT!;
-const REALTIME_PORT = Number(process.env.SS_REALTIME_PORT)!;
 
 const app = Express();
 
 app.use(json());
 app.use(helmet());
-app.use(Cors);
+app.use(Cors({ origin: "*" }));
 
 app.listen(PORT, () => {
-  console.log(`server is running on port ==> ${PORT}`);
+	console.log(`server is running on port ==> ${PORT}`);
 });
 
 new Controller();
+new Security();
 new Command(app);
 new Cdn(app);
 
@@ -36,14 +37,6 @@ new Cdn(app);
 /*                               REALTIME SERVER                              */
 /* -------------------------------------------------------------------------- */
 
-const server = new Server();
+const websockets = new WebSockets();
 
-server.listen(REALTIME_PORT, {
-  cors: {
-    origin: "*",
-    allowedHeaders: "Content-Type,content-type,Authorization,dev",
-    methods: "POST, GET",
-  },
-});
-
-new RealtimeLib(server);
+new Realtime(websockets);

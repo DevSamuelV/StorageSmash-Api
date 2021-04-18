@@ -3,103 +3,104 @@ import { v4 } from "uuid";
 import { Controller } from "../Controller";
 
 export class McServer {
-  public Get = (uid: string) =>
-    new Promise<IMcServer[] | null>(async (resolve) => {
-      const docs = await Controller.prisma.minecraftServer.findMany({
-        where: {
-          uid: uid,
-        },
-      });
+	public Get = (uid: string) =>
+		new Promise<IMcServer[] | null>(async (resolve) => {
+			const docs = await Controller.prisma.minecraftServer.findMany({
+				where: {
+					uid: uid,
+				},
+			});
 
-      if (docs == null) {
-        return resolve(null);
-      }
+			if (docs == null) {
+				return resolve(null);
+			}
 
-      return resolve(docs);
-    });
+			return resolve(docs as IMcServer[]);
+		});
 
-  public AddToQueue = (server: IMcServerReq) =>
-    new Promise<IMcServer>(async (resolve) => {
-      const doc = await Controller.prisma.serverQueue.create({
-        data: {
-          waiting: new Date().toISOString(),
-          serverId: v4(),
-          seed: server.seed,
-          ip: server.ip,
-          maxPlayers: server.maxPlayers,
-          memory: server.memory,
-          name: server.name,
-          online: server.online,
-          port: server.port,
-          serverImage: server.serverImage,
-          uid: server.uid,
-          gamemode: server.gamemode,
-          world: server.world,
-        },
-      });
+	public AddToQueue = (server: IMcServerReq) =>
+		new Promise<IMcServer>(async (resolve) => {
+			const doc = await Controller.prisma.serverQueue.create({
+				data: {
+					waiting: new Date().toISOString(),
+					serverId: v4(),
+					ip: server.ip,
+					maxPlayers: server.maxPlayers,
+					memory: server.memory,
+					name: server.name,
+					online: server.online,
+					port: server.port || 0,
+					serverImage: server.serverImage,
+					uid: server.uid,
+					gamemode: server.gamemode,
+					world: server.world,
+					rconPort: server.rconPort || 0,
+				},
+			});
 
-      return resolve(doc);
-    });
+			return resolve(doc as IMcServer);
+		});
 
-  public Create = (server: IMcServerReq) =>
-    new Promise<IMcServer>(async (resolve) => {
-      const doc = await Controller.prisma.minecraftServer.create({
-        data: {
-          serverId: v4(),
-          seed: server.seed,
-          ip: server.ip,
-          maxPlayers: server.maxPlayers,
-          memory: server.memory,
-          name: server.name,
-          online: server.online,
-          port: server.port,
-          serverImage: server.serverImage,
-          uid: server.uid,
-          gamemode: server.gamemode,
-          world: server.world,
-        },
-      });
+	public Create = (server: IMcServerReq) =>
+		new Promise<IMcServer>(async (resolve) => {
+			const doc = await Controller.prisma.minecraftServer.create({
+				data: {
+					serverId: v4(),
+					ip: server.ip,
+					maxPlayers: server.maxPlayers,
+					memory: server.memory,
+					name: server.name,
+					online: server.online,
+					port: server.port || 0,
+					serverImage: server.serverImage,
+					uid: server.uid,
+					gamemode: server.gamemode,
+					world: server.world,
+					rconPort: server.rconPort || 0,
+					seed: server.seed,
+				},
+			});
 
-      return resolve(doc);
-    });
+			return resolve(doc as IMcServer);
+		});
 
-  public Delete = (serverId: string) =>
-    new Promise(async (resolve) => {
-      const doc = await Controller.prisma.minecraftServer.delete({
-        where: {
-          serverId: serverId,
-        },
-      });
+	public Delete = (serverId: string) =>
+		new Promise(async (resolve) => {
+			const doc = await Controller.prisma.minecraftServer.delete({
+				where: {
+					serverId: serverId,
+				},
+			});
 
-      resolve(doc);
-    });
+			resolve(doc);
+		});
 
-  public ChangePending = (serverId: string, pending: boolean) =>
-    new Promise(async (resolve) => {
-      const doc = await Controller.prisma.minecraftServer.update({
-        where: {
-          serverId: serverId,
-        },
-        data: {
-          pending: pending,
-        },
-      });
+	public ChangePending = (serverId: string, pending: boolean) =>
+		new Promise(async (resolve) => {
+			const doc = await Controller.prisma.minecraftServer.update({
+				where: {
+					serverId: serverId,
+				},
+				data: {
+					pending: pending,
+				},
+			});
 
-      resolve(doc);
-    });
+			resolve(doc);
+		});
 
-  public ChangeStatus = (serverId: string, status: boolean) =>
-    new Promise(async (resolve) => {
-      const doc = await Controller.prisma.minecraftServer.update({
-        where: {
-          serverId: serverId,
-        },
+	public ChangeStatus = (serverId: string, status: boolean) =>
+		new Promise(async (resolve) => {
+			const doc = await Controller.prisma.minecraftServer.update({
+				where: {
+					serverId: serverId,
+				},
 
-        data: {
-          online: status,
-        },
-      });
+				data: {
+					online: status,
+				},
+			});
 
-      resolve(doc);
-    });
+			resolve(doc);
+		});
 }
