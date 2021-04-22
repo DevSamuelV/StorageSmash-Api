@@ -1,7 +1,11 @@
 import { Express } from "express";
 import { db } from "../../db/db";
 import { Services } from "../../Services/Services";
-import { IMcServerReq, ServerProperties } from "../../types/MinecraftServer";
+import {
+	IMcServer,
+	IMcServerReq,
+	ServerProperties,
+} from "../../types/MinecraftServer";
 
 export class Create {
 	constructor(express: Express) {
@@ -14,8 +18,11 @@ export class Create {
 				});
 
 			const server: IMcServerReq = req.body.server;
+			const token: string = req.body.token;
 
-			const payload: IMcServerReq = {
+			const instance = await Services.minecraft.Create(server, token);
+
+			const payload: IMcServer = {
 				gamemode: server.gamemode,
 				ip: "play.storagesmash.com",
 				maxPlayers: server.maxPlayers,
@@ -24,26 +31,27 @@ export class Create {
 				online: false,
 				serverImage: "java",
 				uid: server.uid,
+				serverId: instance.data.ServerId,
+				rconPort: instance.data.RconPort,
+				port: instance.data.ServerPort | 0,
 				world: server.world || ServerProperties.NO_WORLD,
 				seed: server.seed || ServerProperties.NO_SEED,
 			};
 
 			const doc = await db.mc.Create(payload);
 
-			// const serverCreated = await Services.minecraft.Create(server);
+			if (instance.data.ServerId == null) {
+				const queue = await db.mc.AddToQueue(server);
 
-			// if (serverCreated == false) {
-			// 	const queue = await db.mc.AddToQueue(server);
-
-			// 	return res.send({
-			// 		error: false,
-			// 		code: 303,
-			// 		message: "Added Your Server To The Queue",
-			// 		payload: {
-			// 			server: queue,
-			// 		},
-			// 	});
-			// }
+				return res.send({
+					error: false,
+					code: 303,
+					message: "Added Your Server To The Queue",
+					payload: {
+						server: queue,
+					},
+				});
+			}
 
 			if (doc.serverId != null) {
 				return res.send({
@@ -59,7 +67,7 @@ export class Create {
 			return res.send({
 				error: false,
 				code: 500,
-				message: "Error Could Not Create a User",
+				message: "Error Could Not Create a Server",
 			});
 		});
 	}

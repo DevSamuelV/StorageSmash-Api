@@ -14,6 +14,28 @@ export type IMcServer = {
 	rconPort?: number;
 };
 
+export type IMcResponse = {
+	data: {
+		ServerName: string;
+		ServerPort: number;
+		ServerId: string;
+		RconPort: number;
+		ServerMemory: number;
+		ServerStatus: boolean;
+	};
+};
+
+export type IMcResponseRaw = {
+	data: {
+		ServerName: string;
+		ServerPort: string;
+		ServerId: string;
+		RconPort: number;
+		ServerMemory: number;
+		ServerStatus: boolean;
+	};
+};
+
 export type ServerPendingChange = {
 	name: string;
 	id: string;

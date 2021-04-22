@@ -9,16 +9,19 @@ export class Token {
 		Token.Auth = Auth;
 	}
 
-	static Check = (t: string) =>
-		new Promise<{ allow: boolean; message: string }>(async (resolve) => {
-			const token = await Token.Auth.verifyIdToken(t, true);
+	static Check = (t: string): Promise<{ allow: boolean; message: string }> =>
+		Token.Auth.verifyIdToken(t, true)
+			.then((tk) => {
+				if (tk.uid != null) {
+					return Promise.resolve({ allow: true, message: "Your Token is ok" });
+				}
 
-			if (token.uid == null)
-				return resolve({ allow: true, message: "Your Good to go!" });
-
-			if (!isFuture(token.exp))
-				return resolve({ allow: false, message: "Your Token has expired!" });
-
-			return resolve({ allow: false, message: "Unknow Token Error" });
-		});
+				return Promise.resolve({
+					allow: false,
+					message: "Your Token is not verifyed",
+				});
+			})
+			.catch((err) => {
+				return Promise.resolve({ allow: false, message: err.message });
+			});
 }

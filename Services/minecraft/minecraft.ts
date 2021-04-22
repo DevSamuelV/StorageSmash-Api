@@ -1,55 +1,60 @@
-import { MinecraftServer } from "@prisma/client";
-import axios from "axios";
-import { db } from "../../db/db";
-import { IMcServerReq } from "../../types/MinecraftServer";
+import {
+	IMcServerReq,
+	IMcResponse,
+	IMcResponseRaw,
+} from "../../types/MinecraftServer";
+import { RequestorHTTP } from "../../util/requests/Requestor";
 
 export class Minecraft {
-	public Create = (server: IMcServerReq) =>
-		new Promise<boolean | null>(async (resolve) => {
-			// remove this later this is for testing
-			resolve(true);
-
-			const req = axios.post("/v1/CreateServer", { server: server });
-
-			req.then((res) => {
-				console.log(res);
-				resolve(true);
-			});
-			req.catch((err) => {
-				console.log(err);
-
-				resolve(false);
+	public Create = (server: IMcServerReq, token: string) =>
+		new Promise<IMcResponse>(async (resolve) => {
+			const result: IMcResponseRaw = await RequestorHTTP.POST({
+				url: "http://cloud.storagesmash.com:2335/v1/CreateServer",
+				data: { ...server },
+				headers: {
+					Authorization: token,
+				},
 			});
 
-			resolve(true);
+			const payload: IMcResponse = {
+				data: {
+					RconPort: result.data.RconPort,
+					ServerId: result.data.ServerPort,
+					ServerStatus: result.data.ServerStatus,
+					ServerMemory: result.data.ServerMemory,
+					ServerName: result.data.ServerName,
+					ServerPort: Number(result.data.ServerPort),
+				},
+			};
+
+			resolve(payload);
 		});
+	
+	public GetLogs = () => {
+		
+	}
 
 	public Startup = (id: string) =>
 		new Promise((resolve) => {
-			const req = axios.post("/v1/StartServer", { id: id });
-
-			req.then((res) => console.log(res));
-			req.catch((err) => console.log(err));
-
 			resolve(null);
 		});
 
 	public Shutdown = (id: string) =>
 		new Promise((resolve) => {
-			const req = axios.post("/v1/ShutdownServer", { id: id });
+			// const req = axios.post("/v1/ShutdownServer", { id: id });
 
-			req.then((res) => console.log(res));
-			req.catch((err) => console.log(err));
+			// req.then((res) => console.log(res));
+			// req.catch((err) => console.log(err));
 
 			resolve(null);
 		});
 
 	public Delete = (id: string) =>
 		new Promise((resolve) => {
-			const req = axios.post("/v1/DeleteServer", { id: id });
+			// const req = axios.post("/v1/DeleteServer", { id: id });
 
-			req.then((res) => console.log(res));
-			req.catch((err) => console.log(err));
+			// req.then((res) => console.log(res));
+			// req.catch((err) => console.log(err));
 
 			resolve(null);
 		});

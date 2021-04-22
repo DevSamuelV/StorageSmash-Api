@@ -1,4 +1,5 @@
 import { Express } from "express";
+import { Security } from "./Security/Security";
 import { McServer } from "./McServer/McServer";
 import { Referal } from "./Referal/Referal";
 import { User } from "./User/User";
@@ -13,5 +14,8 @@ export class Command {
 
 		// Referal
 		new Referal(express);
+
+		// Security
+		new Security(express);
 	}
 }

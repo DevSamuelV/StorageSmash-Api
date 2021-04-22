@@ -23,41 +23,41 @@ export class McServer {
 			const doc = await Controller.prisma.serverQueue.create({
 				data: {
 					waiting: new Date().toISOString(),
-					serverId: v4(),
 					ip: server.ip,
-					maxPlayers: server.maxPlayers,
-					memory: server.memory,
-					name: server.name,
-					online: server.online,
-					port: server.port || 0,
-					serverImage: server.serverImage,
+					serverId: v4(),
 					uid: server.uid,
-					gamemode: server.gamemode,
+					name: server.name,
 					world: server.world,
+					online: server.online,
+					memory: server.memory,
+					port: server.port || 0,
+					gamemode: server.gamemode,
+					maxPlayers: server.maxPlayers,
 					rconPort: server.rconPort || 0,
+					serverImage: server.serverImage,
 				},
 			});
 
 			return resolve(doc as IMcServer);
 		});
 
-	public Create = (server: IMcServerReq) =>
+	public Create = (server: IMcServer) =>
 		new Promise<IMcServer>(async (resolve) => {
 			const doc = await Controller.prisma.minecraftServer.create({
 				data: {
-					serverId: v4(),
 					ip: server.ip,
-					maxPlayers: server.maxPlayers,
-					memory: server.memory,
+					uid: server.uid,
 					name: server.name,
+					seed: server.seed,
+					world: server.world,
+					memory: server.memory,
 					online: server.online,
 					port: server.port || 0,
-					serverImage: server.serverImage,
-					uid: server.uid,
 					gamemode: server.gamemode,
-					world: server.world,
+					serverId: server.serverId,
+					maxPlayers: server.maxPlayers,
 					rconPort: server.rconPort || 0,
-					seed: server.seed,
+					serverImage: server.serverImage,
 				},
 			});
 
