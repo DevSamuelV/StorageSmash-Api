@@ -7,6 +7,7 @@
 	"private": true,
 	"scripts": {
 		"tsc": "tsc -w",
+		"build": "tsc",
 		"dev": "nodemon build/index.js",
 		"prod": "yarn install && npx prisma db push --preview-feature && nodemon build/index.js",
 		"prisma:dev:migrate": "prisma migrate dev --preview-feature",
@@ -35,8 +36,10 @@
 		"express-rate-limit": "^5.2.6",
 		"firebase-admin": "^9.4.2",
 		"helmet": "^4.4.1",
+		"jose": "^3.11.5",
 		"nock": "^13.0.11",
 		"node-fetch": "^2.6.1",
+		"otplib": "^12.0.1",
 		"prisma": "2.21.2",
 		"rcon-client": "^4.2.3",
 		"socket.io": "^4.0.0",

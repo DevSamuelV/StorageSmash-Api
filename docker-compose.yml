@@ -22,6 +22,7 @@ services:
     ports:
       - 6757:6757
       - 6959:6959
+      - 2345:2345
     volumes:
       - .:/usr/storagesmash-api/
       - /usr/storagesmash-api/node_modules

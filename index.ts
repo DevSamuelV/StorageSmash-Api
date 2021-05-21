@@ -9,6 +9,7 @@ import { Realtime } from "./Realtime/Realtime";
 import { Controller } from "./db/Controller";
 import { WebSockets } from "./websockets/WebSockets";
 import { Security } from "./security/Security";
+import { ws } from "./ws/ws";
 
 require("dotenv").config();
 
@@ -37,6 +38,9 @@ new Cdn(app);
 /*                               REALTIME SERVER                              */
 /* -------------------------------------------------------------------------- */
 
-const websockets = new WebSockets();
+// this will initlize the server
+new ws();
 
-new Realtime(websockets);
+// const websockets = new WebSockets();
+
+// new Realtime(websockets);

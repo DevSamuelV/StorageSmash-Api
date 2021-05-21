@@ -4,15 +4,15 @@ import { ServerPendingChange } from "../types/MinecraftServer";
 import { RealtimeServer } from "./Server";
 
 export class WebSockets {
-	private serve: RealtimeServer = new RealtimeServer();
+	// private serve: RealtimeServer = new RealtimeServer();
 
 	public EmitPendingChange = (data: ServerPendingChange) => {
-		this.serve.Emit("pendingChange", { ...data });
+		// this.serve.Emit("pendingChange", { ...data });
 	};
 
 	public ListenPendingChange = (
 		func: (socket: Socket<DefaultEventsMap, DefaultEventsMap>) => void
 	) => {
-		this.serve.Listen("pendingChange", func);
+		// this.serve.Listen("pendingChange", func);
 	};
 }

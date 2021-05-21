@@ -5,6 +5,12 @@ import {
 } from "../../types/MinecraftServer";
 import { RequestorHTTP } from "../../util/requests/Requestor";
 
+type ServerResponse = {
+	message: string;
+	payload: any;
+	error: boolean;
+};
+
 export class Minecraft {
 	public Create = (server: IMcServerReq, token: string) =>
 		new Promise<IMcResponse>(async (resolve) => {
@@ -29,24 +35,59 @@ export class Minecraft {
 
 			resolve(payload);
 		});
-	
-	public GetLogs = () => {
-		
-	}
 
-	public Startup = (id: string) =>
-		new Promise((resolve) => {
-			resolve(null);
+	public GetLogs = (id: string, token: string) =>
+		new Promise<ServerResponse>(async (resolve) => {
+			const result = await RequestorHTTP.POST({
+				url: "http://cloud.storagesmash.com:2335/v1/GetLogs",
+				data: { id: id },
+				headers: {
+					Authorization: token,
+				},
+			});
+			const _data = result.data;
+
+			if (_data.error == true) {
+				return resolve({ message: _data.message, error: true, payload: null });
+			}
+
+			resolve({ message: _data.message, error: _data.error, payload: _data });
 		});
 
-	public Shutdown = (id: string) =>
-		new Promise((resolve) => {
-			// const req = axios.post("/v1/ShutdownServer", { id: id });
+	public Startup = (id: string, token: string) =>
+		new Promise<ServerResponse>(async (resolve) => {
+			const result = await RequestorHTTP.POST({
+				url: "http://cloud.storagesmash.com:2335/v1/ShutdownServer",
+				data: { id: id },
+				headers: {
+					Authorization: token,
+				},
+			});
+			const _data = result.data;
 
-			// req.then((res) => console.log(res));
-			// req.catch((err) => console.log(err));
+			if (_data.error == true) {
+				return resolve({ message: _data.message, error: true, payload: null });
+			}
 
-			resolve(null);
+			resolve({ message: _data.message, error: _data.error, payload: _data });
+		});
+
+	public Shutdown = (id: string, token: string) =>
+		new Promise<ServerResponse>(async (resolve) => {
+			const result = await RequestorHTTP.POST({
+				url: "http://cloud.storagesmash.com:2335/v1/ShutdownServer",
+				data: { id: id },
+				headers: {
+					Authorization: token,
+				},
+			});
+			const _data = result.data;
+
+			if (_data.error == true) {
+				return resolve({ message: _data.message, error: true, payload: null });
+			}
+
+			resolve({ message: _data.message, error: _data.error, payload: _data });
 		});
 
 	public Delete = (id: string) =>

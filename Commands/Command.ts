@@ -17,5 +17,7 @@ export class Command {
 
 		// Security
 		new Security(express);
+
+		console.warn("HTTP: INIT");
 	}
 }

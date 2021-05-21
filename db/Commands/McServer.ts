@@ -18,6 +18,17 @@ export class McServer {
 			return resolve(docs as IMcServer[]);
 		});
 
+	public Retreve = (id: string) =>
+		new Promise<IMcServer | null>(async (resolve) => {
+			const doc = await Controller.prisma.minecraftServer.findUnique({
+				where: {
+					serverId: id,
+				},
+			});
+
+			return resolve(doc as IMcServer);
+		});
+
 	public AddToQueue = (server: IMcServerReq) =>
 		new Promise<IMcServer>(async (resolve) => {
 			const doc = await Controller.prisma.serverQueue.create({

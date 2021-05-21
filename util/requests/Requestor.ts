@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import http from "http";
 
 type Payload = {
@@ -17,13 +17,13 @@ type Result = {
 
 export class RequestorHTTP {
 	public static POST = (props: Payload) =>
-		new Promise<any>(async (resolve) => {
+		new Promise<AxiosResponse<any>>(async (resolve) => {
 			const request = await axios({
 				method: "POST",
 				...props,
 			});
 
-			resolve(request.data);
+			resolve(request);
 		});
 
 	// public static POST = (options: http.RequestOptions | URL, payload: Object) =>

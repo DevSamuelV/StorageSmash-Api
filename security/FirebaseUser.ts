@@ -1,4 +1,5 @@
 import firebase from "firebase-admin";
+import { db } from "../db/db";
 
 type Exists = {
 	disabled: boolean | undefined;
@@ -9,16 +10,16 @@ type Exists = {
 	username: string | undefined;
 };
 
-export class FirebaseUser {
+export class User {
 	private static Auth: firebase.auth.Auth;
 
 	constructor(Auth: firebase.auth.Auth) {
-		FirebaseUser.Auth = Auth;
+		User.Auth = Auth;
 	}
 
 	static Exists = (uid: string) =>
 		new Promise<Exists>(async (resolve, reject) => {
-			const user = await FirebaseUser.Auth.getUser(uid);
+			const user = await User.Auth.getUser(uid);
 
 			const data: Exists = {
 				disabled: user.disabled,

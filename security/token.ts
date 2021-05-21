@@ -9,11 +9,17 @@ export class Token {
 		Token.Auth = Auth;
 	}
 
-	static Check = (t: string): Promise<{ allow: boolean; message: string }> =>
+	static Check = (
+		t: string
+	): Promise<{ allow: boolean; message: string; uid?: string }> =>
 		Token.Auth.verifyIdToken(t, true)
 			.then((tk) => {
 				if (tk.uid != null) {
-					return Promise.resolve({ allow: true, message: "Your Token is ok" });
+					return Promise.resolve({
+						allow: true,
+						message: "Your Token is ok",
+						uid: tk.uid,
+					});
 				}
 
 				return Promise.resolve({
@@ -22,6 +28,9 @@ export class Token {
 				});
 			})
 			.catch((err) => {
-				return Promise.resolve({ allow: false, message: err.message });
+				return Promise.resolve({
+					allow: false,
+					message: err.message,
+				});
 			});
 }

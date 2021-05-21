@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { db } from "../../db/db";
-import { FirebaseUser } from "../../security/FirebaseUser";
+import { User } from "../../security/FirebaseUser";
 import { IUser } from "../../types/User";
 
 export class Usr_Get {
@@ -15,7 +15,7 @@ export class Usr_Get {
 
 			const uid = req.body.uid;
 			const user = await db.user.Get(uid);
-			const userExists = await FirebaseUser.Exists(uid);
+			const userExists = await User.Exists(uid);
 
 			if (userExists.uid != null && user == null) {
 				const data: IUser = {
