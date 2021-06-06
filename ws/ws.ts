@@ -20,6 +20,8 @@ export class ws {
 				const serverId = res.serverId;
 				const token = res.token;
 
+				console.log(`RCON-GET-LOGS ${JSON.stringify(res)}`);
+
 				if (token == null || serverId == null) return;
 
 				const result = await Token.Check(token);
@@ -27,7 +29,7 @@ export class ws {
 				if (!result.allow || result.uid == null) return;
 
 				// connect the user to a channel for the specific server
-				socket.join(serverId);
+				socket.join(result.uid);
 
 				// check if the user owns this server
 				const doesOwn = await Security.User.DoesOwn.Server(
@@ -43,15 +45,13 @@ export class ws {
 
 				const logs = await Services.minecraft.GetLogs(serverId, token);
 
-				console.log(logs);
-
 				if (logs.error) {
 					return socket.to(serverId).emit("RCON-REQUEST-ERROR", {
 						message: logs.message,
 					});
 				}
 
-				socket.to(serverId).emit("RCON-GET-LOGS-REPLY", { logs: logs });
+				socket.to(result.uid).emit("RCON-GET-LOGS-REPLY", { logs: logs });
 			});
 		});
 	}

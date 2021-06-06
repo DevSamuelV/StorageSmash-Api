@@ -4,7 +4,7 @@ import { Token } from "../../security/token";
 export class VerifyToken {
 	constructor(express: Express) {
 		express.post("/v1/VerifyToken", async (req, res) => {
-			const token = req.body.token;
+			const token: string = String(req.body.token);
 
 			const result = await Token.Check(token);
 

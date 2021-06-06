@@ -30,10 +30,18 @@ export class Shutdown {
 			const isOwner = await Security.User.DoesOwn.Server(serverId, uid);
 
 			if (isOwner) {
-				const _isShuttingDown = await Services.minecraft.Shutdown(
-					serverId,
-					token
-				);
+				const _isShuttingDown = Services.minecraft
+					.Shutdown(serverId, token)
+					.catch((_err) => {
+						res.status(500);
+						return res.send({
+							error: true,
+							code: 500,
+							message: _err.message,
+						});
+					});
+
+				console.log(_isShuttingDown);
 
 				if (_isShuttingDown) {
 					const statusChange = await db.mc.ChangeStatus(serverId, false);
@@ -55,6 +63,14 @@ export class Shutdown {
 					message: "Server is not Shutting Down!",
 				});
 			}
+
+			// res.status(401);
+
+			// return res.send({
+			// 	error: true,
+			// 	code: 401,
+			// 	message: "You Do Not Own that server",
+			// });
 		});
 	}
 }

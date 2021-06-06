@@ -57,7 +57,7 @@ export class Minecraft {
 	public Startup = (id: string, token: string) =>
 		new Promise<ServerResponse>(async (resolve) => {
 			const result = await RequestorHTTP.POST({
-				url: "http://cloud.storagesmash.com:2335/v1/ShutdownServer",
+				url: "http://cloud.storagesmash.com:2335/v1/StartServer",
 				data: { id: id },
 				headers: {
 					Authorization: token,
