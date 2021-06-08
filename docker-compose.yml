@@ -27,4 +27,4 @@ services:
       - .:/usr/storagesmash-api/
       - /usr/storagesmash-api/node_modules
     working_dir: /usr/storagesmash-api
-    command: yarn prod
+    command: yarn prod-server
