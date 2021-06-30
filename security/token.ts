@@ -1,24 +1,29 @@
-import firebase from "firebase-admin";
-
-import { isFuture } from "date-fns";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export class Token {
-	private static Auth: firebase.auth.Auth;
+	private static supabase: SupabaseClient;
 
-	constructor(Auth: firebase.auth.Auth) {
-		Token.Auth = Auth;
+	constructor(_supabase: SupabaseClient) {
+		Token.supabase = _supabase;
 	}
 
 	static Check = (
 		t: string
 	): Promise<{ allow: boolean; message: string; uid?: string }> =>
-		Token.Auth.verifyIdToken(t, true)
-			.then((tk) => {
-				if (tk.uid != null) {
+		Token.supabase.auth.api
+			.getUser(t)
+			.then(({ user }) => {
+				if (user == null)
+					return Promise.resolve({
+						allow: false,
+						message: "Your Token is not verifyed",
+					});
+
+				if (user?.id != null) {
 					return Promise.resolve({
 						allow: true,
 						message: "Your Token is ok",
-						uid: tk.uid,
+						uid: user.id,
 					});
 				}
 

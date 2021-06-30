@@ -6,9 +6,14 @@ import { User } from "./FirebaseUser";
 import { Token } from "./token";
 import { EncryptJWT } from "jose/jwt/encrypt";
 import { generateKeyPairSync } from "crypto";
+import { createClient } from "@supabase/supabase-js";
 
 export class Security {
 	private static keyPair = generateKeyPairSync("rsa", { modulusLength: 2048 });
+	public static supabase = createClient(
+		process.env.SUPABASE_URL!,
+		process.env.SERVICE_KEY!
+	);
 
 	constructor() {
 		const fbAuth = firebase
@@ -18,8 +23,8 @@ export class Security {
 			})
 			.auth();
 
-		new Token(fbAuth);
-		new User(fbAuth);
+		new Token(Security.supabase);
+		new User(Security.supabase.auth);
 	}
 
 	static jwt = class {

@@ -13,9 +13,17 @@ export class Usr_Get {
 					message: "Please Define Uid",
 				});
 
+
 			const uid = req.body.uid;
 			const user = await db.user.Get(uid);
 			const userExists = await User.Exists(uid);
+
+			if (userExists == null)
+				return res.send({
+					error: true,
+					message: "this user does not exist",
+					code: 404,
+				});
 
 			if (userExists.uid != null && user == null) {
 				const data: IUser = {

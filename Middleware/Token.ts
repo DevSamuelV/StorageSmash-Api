@@ -25,6 +25,8 @@ export async function TokenMiddleWare(
   const token = req.body.token;
 
   const tokenInfo = await Token.Check(token);
+    
+  console.log(tokenInfo)
 
   if (tokenInfo.allow) return next();
 
