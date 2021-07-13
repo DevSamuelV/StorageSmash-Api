@@ -7,7 +7,6 @@ networks:
       driver: default
       config:
         - subnet: "21.3.0.0/24"
-          gateway: "21.3.0.1"
   default:
     driver: bridge
 

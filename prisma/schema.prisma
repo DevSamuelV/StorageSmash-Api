@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PLAN_TYPE {
+  IRON
+  GOLD
+  DIAMOND
+}
+
 model Referal {
   code      String   @unique
   percent   Int
@@ -32,6 +38,17 @@ model ServerQueue {
   online      Boolean
   pending     Boolean  @default(true)
   createdAt   DateTime @default(now())
+}
+
+model MinecraftPlan {
+  id        String    @unique @default(uuid())
+  type      PLAN_TYPE @default(IRON)
+  ram       Int       @default(3)
+  price     Decimal   @default(4.99)
+  yearly    Boolean   @default(false)
+  desc      String
+  included  String[]
+  createdAt DateTime? @default(now())
 }
 
 model MinecraftServer {

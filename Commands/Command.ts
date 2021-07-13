@@ -3,6 +3,7 @@ import { Security } from "./Security/Security";
 import { McServer } from "./McServer/McServer";
 import { Referal } from "./Referal/Referal";
 import { User } from "./User/User";
+import { Plan } from "./Plan";
 
 export class Command {
 	constructor(express: Express) {
@@ -17,6 +18,9 @@ export class Command {
 
 		// Security
 		new Security(express);
+
+		// Minecraft Plans
+		new Plan(express);
 
 		console.warn("HTTP: INIT");
 	}

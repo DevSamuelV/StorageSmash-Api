@@ -12,17 +12,10 @@ export class Security {
 	private static keyPair = generateKeyPairSync("rsa", { modulusLength: 2048 });
 	public static supabase = createClient(
 		process.env.SUPABASE_URL!,
-		process.env.SERVICE_KEY!
+		process.env.SUPABASE_KEY!
 	);
 
 	constructor() {
-		const fbAuth = firebase
-			.initializeApp({
-				credential: firebase.credential.cert(Env.Firebase_Key),
-				databaseURL: "https://officialstoragesmash.firebaseio.com",
-			})
-			.auth();
-
 		new Token(Security.supabase);
 		new User(Security.supabase.auth);
 	}

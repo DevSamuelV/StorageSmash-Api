@@ -33,7 +33,7 @@ export class Create {
 				uid: server.uid,
 				serverId: instance.data.ServerId,
 				rconPort: instance.data.RconPort,
-				port: instance.data.ServerPort | 0,
+				port: instance.data.ServerPort || 0,
 				world: server.world || ServerProperties.NO_WORLD,
 				seed: server.seed || ServerProperties.NO_SEED,
 			};

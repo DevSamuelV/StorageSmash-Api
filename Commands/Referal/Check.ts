@@ -16,7 +16,9 @@ export class Check {
 
 			const result = await db.Referal.Get(code);
 
-			if (result != null)
+			if (result != null) {
+				res.status(200);
+
 				return res.send({
 					code: 200,
 					error: false,
@@ -25,6 +27,9 @@ export class Check {
 						referal: result,
 					},
 				});
+			}
+
+			res.status(404);
 
 			return res.send({
 				error: true,

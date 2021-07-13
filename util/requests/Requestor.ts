@@ -15,6 +15,9 @@ type Result = {
 	data: {};
 };
 
+/**
+ * @deprecated Try Not to use this for http requests
+ */
 export class RequestorHTTP {
 	public static POST = (props: Payload) =>
 		new Promise<AxiosResponse<any>>(async (resolve) => {

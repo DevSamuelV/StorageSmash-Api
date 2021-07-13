@@ -12,19 +12,15 @@ export class Usr_Get {
 					code: 500,
 					message: "Please Define Uid",
 				});
-
-
 			const uid = req.body.uid;
 			const user = await db.user.Get(uid);
 			const userExists = await User.Exists(uid);
-
 			if (userExists == null)
 				return res.send({
 					error: true,
 					message: "this user does not exist",
 					code: 404,
 				});
-
 			if (userExists.uid != null && user == null) {
 				const data: IUser = {
 					email: userExists.email || "Email-None",
@@ -34,9 +30,7 @@ export class Usr_Get {
 					uid: userExists.uid,
 					username: userExists.username || "no-name",
 				};
-
 				const newUsr = await this.CreateNewUser(data);
-
 				return res.send({
 					error: false,
 					code: 201,
@@ -46,7 +40,6 @@ export class Usr_Get {
 					},
 				});
 			}
-
 			if (user == null) {
 				return res.send({
 					error: true,
@@ -54,7 +47,6 @@ export class Usr_Get {
 					message: "User Not Found",
 				});
 			}
-
 			return res.send({
 				error: false,
 				code: 500,
